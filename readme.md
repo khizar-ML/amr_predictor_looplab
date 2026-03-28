@@ -4,6 +4,8 @@
 
 🔗 **Live Application:** [AMR Phenotype Predictor (Streamlit)](https://amrpredictorlooplab-j7dzjq5aryzicsxzo2jsva.streamlit.app/)
 
+**Presentation:** [Video Presentation Link (Google Drive)](https://drive.google.com/file/d/1Ufxsv2RFu272FilhMZL1h31B7GVLNS5C/view?usp=drive_link)
+
 ---
 
 ## Table of Contents
