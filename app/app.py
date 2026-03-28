@@ -27,6 +27,7 @@ st.markdown(
     "Upload a CSV file from the **BVBRC genome AMR** dataset. "
     "The app will preprocess your data, load an XGBoost model, "
     "and return a downloadable predictions file."
+    "Plz refer to side bar to select if your dataset has target variable or not"
 )
 
 # ─────────────────────────────────────────
