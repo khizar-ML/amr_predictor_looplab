@@ -27,8 +27,9 @@ st.markdown(
     "Upload a CSV file from the **BVBRC genome AMR** dataset. "
     "The app will preprocess your data, load an XGBoost model, "
     "and return a downloadable predictions file."
-    "Plz refer to side bar to select if your dataset has target variable or not"
 )
+# This creates a blue highlighted box
+st.info("👈 **Important:** Please refer to the sidebar to select whether your dataset has a target variable or not.")
 
 # ─────────────────────────────────────────
 # Constants
