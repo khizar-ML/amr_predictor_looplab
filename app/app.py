@@ -24,6 +24,8 @@ st.set_page_config(
     layout="wide",
 )
 
+
+
 # ─────────────────────────────────────────
 # Resource Loading (Cached for Performance)
 # ─────────────────────────────────────────
@@ -70,7 +72,7 @@ REQUIRED_COLS_NO_TARGET = [
 SIGN_MAP = {"<=": -2, "<": -1, "=": 0, ">": 1, ">=": 2}
 EVIDENCE_MAP = {"Laboratory Method": 0, "Computational Method": 1}
 CUSTOM_THRESHOLD = 0.65 
-
+TOP_N_ANTIBIOTICS = 10
 # ─────────────────────────────────────────
 # Helper: convert measurement values
 # ─────────────────────────────────────────
@@ -201,8 +203,20 @@ if uploaded_file is not None:
         elif raw_df["Resistant Phenotype"].isna().any():
             valid_count = raw_df["Resistant Phenotype"].notna().sum()
             missing_count = raw_df["Resistant Phenotype"].isna().sum()
-            st.warning(f"⚠️ Detected {missing_count} missing labels. Metrics will be calculated on {valid_count} rows.")
+            st.warning(
+                f"⚠️ Detected {missing_count} missing values in `Resistant Phenotype`. "
+                f"The app will predict phenotypes for ALL rows, but the Classification Metrics "
+                f"will only be calculated using the {valid_count} rows with known labels."
+            )
+    required = REQUIRED_COLS_WITH_TARGET if has_target else REQUIRED_COLS_NO_TARGET
+    missing_cols = [c for c in required if c not in raw_df.columns]
 
+    if missing_cols:
+        st.error(
+            f"**Missing required columns:** {missing_cols}\n\n"
+            f"Your file must contain: `{required}`"
+        )
+        st.stop()
     run_btn = st.button("🚀 Run Preprocessing & Predict", type="primary")
 
     if run_btn:
