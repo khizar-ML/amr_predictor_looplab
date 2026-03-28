@@ -4,6 +4,9 @@
 
 🔗 **Live Application:** [AMR Phenotype Predictor (Streamlit)](https://amrpredictorlooplab-j7dzjq5aryzicsxzo2jsva.streamlit.app/)
 
+**Presentation:** [Video Presentation Link (Google Drive)](https://drive.google.com/file/d/1Ufxsv2RFu272FilhMZL1h31B7GVLNS5C/view?usp=drive_link)
+
+
 ---
 
 ## Table of Contents
@@ -46,7 +49,7 @@ The deployed XGBoost model was evaluated specifically against a rigorous validat
 
 * **Accuracy:** **91%** 
 * **Weighted F1-Score:** **91%** — Strong validation that the model effectively recognizes both classes without heavily falling into majority class bias.
-* **AUC-ROC:** **95%** — Proving excellent separability thresholds between Susceptibility and Resistance parameters.
+* **AUC-ROC:** **97%** — Proving excellent separability thresholds between Susceptibility and Resistance parameters.
 
 **Web Dashboard Resiliency:** The live application natively accommodates evaluation omissions. If users upload data with missing Target labels, it gracefully drops back safely to full prediction logic (providing confidence probabilities) without raising structural execution errors.
 
