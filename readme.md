@@ -2,27 +2,58 @@
 **By The Elites**  
 **Project:** CUI · LoopVerse 2.0 ML Module
 
-## Overview
-This repository contains a machine learning pipeline and a Streamlit web application designed to predict Antimicrobial Resistance (AMR) phenotypes based on genome data, antibiotic types, and clinical measurements. The data originates from the BVBRC genome AMR dataset.
+🔗 **Live Application:** [AMR Phenotype Predictor (Streamlit)](https://amrpredictorlooplab-j7dzjq5aryzicsxzo2jsva.streamlit.app/)
 
+---
 
-## Core Components
-* **`exploration copy 3.ipynb`**: The comprehensive, documented Jupyter Notebook that builds the entire ML prediction pipeline. It covers:
-  * **Data Loading & Cleaning:** Null value handling to prevent data leakage in training/validation/test splits.
-  * **Exploratory Data Analysis (EDA) & Statistical Significance:** Validates relationships between categorical (`Evidence`, `has_measurement`) and continuous (`Measurement Value`) features against target phenotypes. Includes Chi-Square and T-Tests.
-  * **Feature Engineering:** Target Encoding high-cardinality features (`Genome Name`), One-Hot Encoding (`Antibiotic`), and Ordinal Mapping (`Measurement Sign`, `Evidence`).
-  * **Model Tuning and Training:** Training an XGBoost Classifier via `Optuna`, heavily penalizing the minority class (`Resistant`) to handle extreme class imbalances.
-  * **Evaluation:** Analyzing model diagnostics through Feature Importance, threshold optimization, F1-Score, and AUC-ROC.
-* **`app/app.py`**: A deployment-ready Streamlit web application interface that implements the trained XGBoost model and preprocessing pipeline for live user inference.
+## Table of Contents
+1. [Project Description](#1-project-description)
+2. [Approach](#2-approach)
+3. [Folder Structure](#3-folder-structure)
+4. [Results](#4-results)
+5. [Final Remarks & Credits](#5-final-remarks--credits)
 
-## Web Application Features
-* **CSV Data Upload**: Seamlessly accepts BVBRC AMR formatted datasets (requires properties like `Genome Name`, `Antibiotic`, `Measurement Value`, `Evidence`, `Measurement Sign`).
-* **Robust Preprocessing Pipeline**: Automatically applies the pre-fitted Target, One-Hot, and Label encoders built in the exploration notebook onto newly ingested data. Force-maps columns structurally for the XGBoost model.
-* **Dynamic Inference Mode**: Modifies classification metric evaluations automatically depending on whether the target variable (`Resistant Phenotype`) is present or absent in the uploaded dataset. Falls back to generating probability inferences regardless.
-* **Detailed Insights & Classification Reports**: Outputs diagnostic metrics such as Weighted F1-score, AUC-ROC, a plotted Confusion Matrix, and horizontally barred Top 10 Feature Importances when verifiable targets are provided.
-* **Downloadable Predictions List**: Offers a one-click CSV download for all generated model predictions (Susceptible/Resistant) along with output confidence probabilities (`y_probs`).
+---
 
-## 👨‍💻 Credits
+## 1. Project Description
+This repository contains a comprehensive machine learning pipeline and a deployment-ready Streamlit web application designed to predict Antimicrobial Resistance (AMR) phenotypes. By ingesting genome data, antibiotic types, and clinical laboratory measurements originating from the **BVBRC genome AMR dataset**, this module identifies strains as either **Resistant** or **Susceptible**.
+
+The aim of this project is to provide a robust predictive interface that natively handles severe class imbalances and high-cardinality genomic data. This results in reliable phenotypic predictions, serving as an effective diagnostic aid to map out susceptibility vectors against antimicrobial treatments.
+
+## 2. Approach
+The methodology is meticulously laid out in our primary exploration notebook (`notebooks/exploration copy 3.ipynb`) and operates in the following stages:
+
+* **Data Loading & Rigorous Cleaning:** Null value handling and data stratification to prevent target leakage across the training, validation, and testing sample splits. Ambiguous intermediate phenotypes are structurally dropped to optimize binary prediction confidence.
+* **Exploratory Data Analysis (EDA) & Statistical Tests:** Validates relationships between categorical variables (like `Evidence` and measurement presence) and continuous variables (`Measurement Value`) against target phenotypes using Chi-Square and T-Tests.
+* **Feature Engineering:**
+  * *Target Encoding* applied to high-cardinality features like `Genome Name` to extract structural patterns without dimensionality explosion.
+  * *One-Hot Encoding* mapped strictly upon leading `Antibiotic` features.
+  * *Ordinal Mapping* implemented for `Measurement Sign` and `Evidence` to secure categorical preservation.
+* **Model Tuning and Training:** We initialized an **XGBoost Classifier** guided via **Optuna** to heavily optimize hyperparameter distributions. Crucially, the approach structurally applies a `scale_pos_weight` that heavily penalizes misclassification against the minority class (`Resistant`) to handle extreme imbalances securely.
+* **Inference Pipeline:** A Streamlit app (`app/app.py`) reconstructs this entire data processing payload dynamically onto any user-uploaded CSV dataset.
+
+## 3. Folder Structure
+* **`app/`**: Contains the Streamlit web application (`app.py`), required web dependencies (`requirements.txt`), and the serialized `.pkl` models/encoders for deployment.
+* **`bonus_files/`**: Contains additional supplementary files or experimental scripts beyond the primary prediction scope.
+* **`catboost_info/`**: Automatically generated log directories from CatBoost model training runs.
+* **`notebooks/`**: Houses the core machine learning pipelines, including EDA, data preprocessing, and model training in Jupyter Notebooks.
+* **`reports/`**: Contains diagnostic model evaluations and metric reports (e.g. `model_evaluation_report.md`).
+* **`saved_files/`**: Output directory used for storing globally serialized model states (`.pkl` encoders), datasets, or outputs.
+* **`visualizations/`**: Stores exported plots, graphs, and visual findings generated during exploratory data analysis and module evaluation.
+
+## 4. Results
+The deployed XGBoost model was evaluated specifically against a rigorous validation sample with heavy class imbalance (57,912 Susceptible vs. 25,184 Resistant samples).
+
+* **Accuracy:** **91%** 
+* **Weighted F1-Score:** **91%** — Strong validation that the model effectively recognizes both classes without heavily falling into majority class bias.
+* **AUC-ROC:** **95%** — Proving excellent separability thresholds between Susceptibility and Resistance parameters.
+
+**Web Dashboard Resiliency:** The live application natively accommodates evaluation omissions. If users upload data with missing Target labels, it gracefully drops back safely to full prediction logic (providing confidence probabilities) without raising structural execution errors.
+
+## 5. Final Remarks & Credits
+This predictive module successfully bridges the gap between massive genomic surveillance records and instant predictive evaluations. It highlights a secure implementation that not only maintains high Susceptibility recall but minimizes False Negatives in recognizing Antimicrobial Resistance—serving as a solid foundation capable of supporting healthcare monitoring and antibiotic stewardship heuristics.
+
+**Developed By:**
 * Khizar Abbas Khan
 * Zeeshan Ahmad
 * Muhammad Humais
