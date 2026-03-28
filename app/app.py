@@ -32,17 +32,18 @@ st.markdown(
 # ─────────────────────────────────────────
 # Constants
 # ─────────────────────────────────────────
+# ADDED 'Genome ID' to the required columns
 REQUIRED_COLS_WITH_TARGET = [
-    "Genome Name", "Antibiotic", "Measurement Value",
+    "Genome ID", "Genome Name", "Antibiotic", "Measurement Value",
     "Evidence", "Resistant Phenotype", "Measurement Sign",
 ]
 REQUIRED_COLS_NO_TARGET = [
-    "Genome Name", "Antibiotic", "Measurement Value",
+    "Genome ID", "Genome Name", "Antibiotic", "Measurement Value",
     "Evidence", "Measurement Sign",
 ]
 SIGN_MAP = {"<=": -2, "<": -1, "=": 0, ">": 1, ">=": 2}
 EVIDENCE_MAP = {"Laboratory Method": 0, "Computational Method": 1}
-CUSTOM_THRESHOLD = 0.64  # Adjusted based on footer
+CUSTOM_THRESHOLD = 0.65  # Adjusted based on footer
 TOP_N_ANTIBIOTICS = 10
 
 # ─────────────────────────────────────────
@@ -71,7 +72,10 @@ def preprocess(df: pd.DataFrame, has_target: bool):
         raise ValueError(f"Missing columns in uploaded file: {missing}")
 
     df = df[cols].copy()
-    genome_ids = df["Genome Name"].values
+    
+    # Extract Genome ID and then drop it so it doesn't interfere with the ML features
+    genome_ids = df["Genome ID"].values
+    df.drop(columns=["Genome ID"], inplace=True)
 
     # --- Step 1: Target logic (NO DROPPING ROWS) ---
     if has_target:
@@ -226,9 +230,9 @@ if uploaded_file is not None:
         with st.spinner("Predicting on XGBoost model..."):
             y_labels, y_probs = predict(X)
             
-        # Output dataframe generation (Consistent across both modes)
+        # Output dataframe generation: CHANGED Genome Name to Genome ID
         out_df = pd.DataFrame({
-            "Genome Name": raw_df["Genome Name"],
+            "Genome ID": raw_df["Genome ID"],
             "Antibiotic": raw_df["Antibiotic"],
             "Predicted Phenotype": y_labels,
             "Resistance Probability": np.round(y_probs, 4),
@@ -308,13 +312,10 @@ else:
     st.info(
         "👈 Upload a CSV file to get started. "
         "The file should be in the **BVBRC genome AMR** format "
-        "with columns such as `Genome Name`, `Antibiotic`, `Measurement Value`, "
+        "with columns such as `Genome ID`, `Genome Name`, `Antibiotic`, `Measurement Value`, "
         "`Evidence`, `Measurement Sign`, and optionally `Resistant Phenotype`."
     )
 
-# ─────────────────────────────────────────
-# Footer
-# ─────────────────────────────────────────
 # ─────────────────────────────────────────
 # Footer
 # ─────────────────────────────────────────
