@@ -9,7 +9,7 @@ This report evaluates the performance of the deployed XGBoost Classifier for pre
   * *Explanation:* Accuracy measures the overall percentage of correct predictions out of the total predictions made. While highly intuitive, it can sometimes be misleading in imbalanced datasets like ours, but a 91% accuracy shows strong baseline predictability.
 * **Weighted F1-Score:** 0.91 (91%)
   * *Explanation:* The F1-Score calculates the harmonic mean of Precision and Recall. The weighted adjustment accounts for the severe class imbalance in our AMR dataset (57,912 Susceptible vs 25,184 Resistant instances) by calculating the metrics for each label and finding their average weighted by support. A 91% weighted F1-score confirms the model effectively recognizes both classes and doesn't superficially guess the majority class.
-* **AUC-ROC:** 0.95 (95%)
+* **AUC-ROC:** 0.977 (97%)
   * *Explanation:* Area Under the Receiver Operating Characteristic Curve (AUC-ROC). It indicates the model's ability to distinguish between Susceptible (Class 0) and Resistant (Class 1) classes across different probability thresholds. An AUC of 0.95 indicates an excellent degree of separability.
 
 ## 3. Confusion Matrix Breakdown
